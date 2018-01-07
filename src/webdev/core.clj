@@ -20,11 +20,19 @@
    :body "My name is Caio Guedes! I created this site! Isn't it lovely?"
    :headers {}})
 
+(defn yo
+  [req]
+  (let [name (get-in req [:route-params :name])]
+    {:status 200
+     :body (str "Yo! " name "!")
+     :headers {}}))
+
 (defroutes app
            (GET "/" [] greet)
            (GET "/goodbye" [] goodbye)
            (GET "/about" [] about)
            (GET "/request" [] handle-dump)
+           (GET "/yo/:name" [] yo)
            (not-found "Page not found."))
 
 (defn -main [port]
