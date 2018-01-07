@@ -57,7 +57,7 @@
            (GET "/" [] greet)
            (GET "/goodbye" [] goodbye)
            (GET "/about" [] about)
-           (GET "/request" [] handle-dump)
+           (ANY "/request" [] handle-dump)
            (GET "/yo/:name" [] yo)
            (GET "/calc/:a/:op/:b" [] calc)
            (GET "/items" [] handle-index-items)
