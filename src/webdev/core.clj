@@ -27,12 +27,32 @@
      :body (str "Yo! " name "!")
      :headers {}}))
 
+(def ops {"+" +
+          "-" -
+          "*" *
+          ":" /})
+
+(defn calc
+  [req]
+  (let [op (get-in req [:route-params :op])
+        f (get ops op)
+        a (Integer. (get-in req [:route-params :a]))
+        b (Integer. (get-in req [:route-params :b]))]
+    (if f
+      {:status 200
+        :body (str (f a b))
+        :headers {}}
+      {:status 404
+        :body "Unknown operator"
+        :headers {}})))
+
 (defroutes app
            (GET "/" [] greet)
            (GET "/goodbye" [] goodbye)
            (GET "/about" [] about)
            (GET "/request" [] handle-dump)
            (GET "/yo/:name" [] yo)
+           (GET "/calc/:a/:op/:b" [] calc)
            (not-found "Page not found."))
 
 (defn -main [port]
