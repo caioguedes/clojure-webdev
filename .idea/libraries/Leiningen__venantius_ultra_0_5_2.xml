@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: venantius/ultra:0.5.2">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/venantius/ultra/0.5.2/ultra-0.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
