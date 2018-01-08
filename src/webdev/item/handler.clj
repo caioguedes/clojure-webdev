@@ -11,8 +11,17 @@
      :headers {}
      :body (str "<html><head></head></body><div>"
                 (mapv :name items)
-                "</div><form method=\"POST\" action=\"/request\">"
+                "</div><form method=\"POST\" action=\"/items\">"
                 "<input type=\"text\" name=\"name\" placeholder=\"name\">"
                 "<input type=\"text\" name=\"description\" placeholder=\"description\">"
                 "<input type=\"submit\">"
                 "</form></body></html>")}))
+
+(defn handle-create-item [req]
+  (let [name (get-in req [:params "name"])
+        description (get-in req [:params "description"])
+        db (:webdev/db req)
+        item-id (create-item db name description)]
+    {:status 302
+     :headers {"Location" "/items"}
+     :body ""}))
