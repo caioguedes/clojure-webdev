@@ -93,14 +93,13 @@
       (hdlr req))))
 
 (def app
-  (wrap-server
-    (wrap-file-info
-      (wrap-resource
-        (wrap-db
-          (wrap-params
-            (wrap-simulated-method
-              routes)))
-        "static"))))
+  (-> routes
+      (wrap-simulated-method)
+      (wrap-params)
+      (wrap-db)
+      (wrap-resource "static")
+      (wrap-file-info)
+      (wrap-server)))
 
 (defn -main [port]
   (items/create-table db)
