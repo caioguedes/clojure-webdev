@@ -1,7 +1,8 @@
 (ns webdev.core
   (:require [webdev.item.model :as items]
             [webdev.item.handler :refer [handle-index-items
-                                         handle-create-item]])
+                                         handle-create-item
+                                         handle-delete-item]])
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.params :refer [wrap-params]]
@@ -65,6 +66,7 @@
            (GET "/calc/:a/:op/:b" [] calc)
            (GET "/items" [] handle-index-items)
            (POST "/items" [] handle-create-item)
+           (DELETE "/items/:item-id" [] handle-delete-item)
            (not-found "Page not found."))
 (defn wrap-db
   [hdlr]
@@ -76,12 +78,24 @@
   (fn [req]
     (assoc-in (hdlr req) [:headers "Server"] "Listronica 9000")))
 
+(def sim-methods {"PUT" :put
+                 "DELETE" :delete})
+
+(defn wrap-simulated-method [hdlr]
+  (fn [req]
+    (if-let [method (and (= :post (:require-method req))
+                         (sim-methods (get-in req [:params "_method"])))]
+      (hdlr (assoc req :request-method method))
+      (hdlr req))))
+
 (def app
   (wrap-server
     (wrap-file-info
       (wrap-resource
         (wrap-db
-          (wrap-params routes))
+          (wrap-params
+            (wrap-simulated-method
+              routes)))
         "static"))))
 
 (defn -main [port]
