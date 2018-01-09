@@ -13,9 +13,11 @@
             [compojure.route :refer [not-found]]
             [ring.handler.dump :refer [handle-dump]]))
 
-(def db {:dbtype "postgresql"
-         :dbname "webdev"
-         :user "postgres"})
+(def db (or
+          (System/getenv "DATABASE_URL")
+          {:dbtype "postgresql"
+           :dbname "webdev"
+           :user "postgres"}))
 
 (defn greet [req]
   {:status 200
