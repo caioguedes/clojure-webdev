@@ -2,7 +2,8 @@
   (:require [webdev.item.model :as items]
             [webdev.item.handler :refer [handle-index-items
                                          handle-create-item
-                                         handle-delete-item]])
+                                         handle-delete-item
+                                         handle-update-item]])
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.params :refer [wrap-params]]
@@ -67,6 +68,7 @@
            (GET "/items" [] handle-index-items)
            (POST "/items" [] handle-create-item)
            (DELETE "/items/:item-id" [] handle-delete-item)
+           (PUT "/items/:item-id" [] handle-update-item)
            (not-found "Page not found."))
 (defn wrap-db
   [hdlr]
